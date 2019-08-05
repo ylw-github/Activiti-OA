@@ -25,3 +25,7 @@ JDK、MySQL
 |  罗杰 | 1234  |
 
 ## 项目截图
+![](https://github.com/ylw-github/Activiti-OA/blob/master/src/main/webapp/images/login.png)
+![](https://github.com/ylw-github/Activiti-OA/blob/master/src/main/webapp/images/deploy.png)
+![](https://github.com/ylw-github/Activiti-OA/blob/master/src/main/webapp/images/leave_apply.png)
+![](https://github.com/ylw-github/Activiti-OA/blob/master/src/main/webapp/images/task.png)
