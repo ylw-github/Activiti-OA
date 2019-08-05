@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1564737013925" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="oa_leave" isClosed="false" isExecutable="true" name="请假流程" processType="None">
+    <startEvent id="startEventId" name="开始"/>
+    <userTask activiti:async="true" activiti:candidateGroups="cgPM" activiti:exclusive="true" id="pmId" name="项目经理审核"/>
+    <sequenceFlow id="_2" name="请假申请" sourceRef="startEventId" targetRef="pmId"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="pmAgreeGateWay" name="调入人力资源部门"/>
+    <sequenceFlow id="_4" sourceRef="pmId" targetRef="pmAgreeGateWay"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="replayGateWay" name="接收到撤回申请单"/>
+    <userTask activiti:candidateGroups="cgHR" activiti:exclusive="true" id="hrId" name="人力审核"/>
+    <sequenceFlow id="_7" name="同意" sourceRef="pmAgreeGateWay" targetRef="hrId">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${deptleaderapprove=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_9" name="是" sourceRef="replayGateWay" targetRef="pmId">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reapply=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway gatewayDirection="Unspecified" id="hrAgreeGateWay" name="调回申请人部门"/>
+    <sequenceFlow id="_11" sourceRef="hrId" targetRef="hrAgreeGateWay"/>
+    <userTask activiti:candidateGroups="cgRB" activiti:exclusive="true" id="reportback" name="销假"/>
+    <sequenceFlow id="_3" name="同意" sourceRef="hrAgreeGateWay" targetRef="reportback">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${hrapprove=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endEventId" name="结束"/>
+    <sequenceFlow id="_6" sourceRef="reportback" targetRef="endEventId"/>
+    <sequenceFlow id="_5" name="否" sourceRef="replayGateWay" targetRef="endEventId">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reapply=='false'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:candidateGroups="cgMA" activiti:exclusive="true" id="modifyapply" name="审核不通过"/>
+    <sequenceFlow id="_8" sourceRef="modifyapply" targetRef="replayGateWay"/>
+    <sequenceFlow id="_12" name="拒绝" sourceRef="pmAgreeGateWay" targetRef="modifyapply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${deptleaderapprove=='false'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_13" name="拒绝" sourceRef="hrAgreeGateWay" targetRef="modifyapply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${hrapprove=='false'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="oa_leave">
+      <bpmndi:BPMNShape bpmnElement="startEventId" id="Shape-startEventId">
+        <omgdc:Bounds height="32.0" width="32.0" x="285.0" y="40.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmId" id="Shape-pmId">
+        <omgdc:Bounds height="55.0" width="85.0" x="260.0" y="155.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmAgreeGateWay" id="Shape-pmAgreeGateWay" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="290.0" y="325.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="replayGateWay" id="Shape-replayGateWay" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="10.0" y="390.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="hrId" id="Shape-hrId">
+        <omgdc:Bounds height="55.0" width="85.0" x="265.0" y="460.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="hrAgreeGateWay" id="Shape-hrAgreeGateWay" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="295.0" y="605.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="reportback" id="Shape-reportback">
+        <omgdc:Bounds height="55.0" width="85.0" x="275.0" y="715.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEventId" id="Shape-endEventId">
+        <omgdc:Bounds height="32.0" width="32.0" x="290.0" y="830.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifyapply" id="Shape-modifyapply">
+        <omgdc:Bounds height="55.0" width="85.0" x="120.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_13" id="BPMNEdge__13" sourceElement="hrAgreeGateWay" targetElement="modifyapply">
+        <omgdi:waypoint x="295.0" y="621.0"/>
+        <omgdi:waypoint x="155.0" y="500.0"/>
+        <omgdi:waypoint x="155.0" y="435.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12" sourceElement="pmAgreeGateWay" targetElement="modifyapply">
+        <omgdi:waypoint x="290.0" y="341.0"/>
+        <omgdi:waypoint x="160.0" y="360.0"/>
+        <omgdi:waypoint x="160.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2" id="BPMNEdge__2" sourceElement="startEventId" targetElement="pmId">
+        <omgdi:waypoint x="301.0" y="72.0"/>
+        <omgdi:waypoint x="301.0" y="155.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="hrAgreeGateWay" targetElement="reportback">
+        <omgdi:waypoint x="311.0" y="637.0"/>
+        <omgdi:waypoint x="311.0" y="715.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="pmId" targetElement="pmAgreeGateWay">
+        <omgdi:waypoint x="306.0" y="210.0"/>
+        <omgdi:waypoint x="306.0" y="325.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="replayGateWay" targetElement="endEventId">
+        <omgdi:waypoint x="25.0" y="421.0"/>
+        <omgdi:waypoint x="25.0" y="580.0"/>
+        <omgdi:waypoint x="290.0" y="846.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="reportback" targetElement="endEventId">
+        <omgdi:waypoint x="306.0" y="770.0"/>
+        <omgdi:waypoint x="306.0" y="830.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="pmAgreeGateWay" targetElement="hrId">
+        <omgdi:waypoint x="306.0" y="357.0"/>
+        <omgdi:waypoint x="306.0" y="460.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="modifyapply" targetElement="replayGateWay">
+        <omgdi:waypoint x="120.0" y="407.5"/>
+        <omgdi:waypoint x="42.0" y="406.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9" sourceElement="replayGateWay" targetElement="pmId">
+        <omgdi:waypoint x="25.0" y="391.0"/>
+        <omgdi:waypoint x="25.0" y="210.0"/>
+        <omgdi:waypoint x="260.0" y="210.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="BPMNEdge__11" sourceElement="hrId" targetElement="hrAgreeGateWay">
+        <omgdi:waypoint x="311.0" y="515.0"/>
+        <omgdi:waypoint x="311.0" y="605.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
